@@ -5,16 +5,32 @@ namespace Poc.AutomatedTesting.Selenium.Core;
 
 public abstract class BaseTest : IDisposable
 {
-    public readonly IWebDriver _driver;
-    private readonly bool _closeWindowAfterTestExecution;
+    public IWebDriver _driver;
+    private bool _closeWindowAfterTestExecution;
 
-    public BaseTest(string urlPage, bool closeWindowAfterTestExecution = true)
+    public BaseTest(string urlPage, bool isHeadlessMode) =>
+        SetupEdgeBrowser(urlPage, isHeadlessMode);
+
+    private void SetupEdgeBrowser(string urlPage, bool isHeadlessMode)
     {
-        _driver = new EdgeDriver();
-        _driver.Navigate().GoToUrl(urlPage);
-        _driver.Manage().Window.Maximize();
+        var edgeOptions = new EdgeOptions();
+        edgeOptions.AddArgument("disk-cache-size=0");
+
+        if (isHeadlessMode)
+        {
+            edgeOptions.AddArgument("window-size=1366x768");
+            edgeOptions.AddArgument("headless");
+            _driver = new EdgeDriver(edgeOptions);
+        }
+        else // Dev Mode
+        {
+            edgeOptions.AddArguments("start.maximized");
+            _driver = new EdgeDriver(edgeOptions);
+            _closeWindowAfterTestExecution = false;
+        }
+
         _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-        _closeWindowAfterTestExecution = closeWindowAfterTestExecution;
+        _driver.Navigate().GoToUrl(urlPage);
     }
 
     public void Dispose()

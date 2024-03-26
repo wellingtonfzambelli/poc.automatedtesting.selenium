@@ -12,7 +12,7 @@ public sealed class GetAddressTest : BaseTest
     const string _dropdownId = "tipoCEP";
     const string _buttonSendId = "btn_pesquisar";
 
-    public GetAddressTest() : base("https://buscacepinter.correios.com.br/app/endereco/index.php")
+    public GetAddressTest() : base("https://buscacepinter.correios.com.br/app/endereco/index.php", false)
     { }
 
     [Fact]
