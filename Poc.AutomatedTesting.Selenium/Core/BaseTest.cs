@@ -13,24 +13,34 @@ public abstract class BaseTest : IDisposable
 
     private void SetupEdgeBrowser(string urlPage, bool isHeadlessMode)
     {
-        var edgeOptions = new EdgeOptions();
-        edgeOptions.AddArgument("disk-cache-size=0");
-
         if (isHeadlessMode)
-        {
-            edgeOptions.AddArgument("window-size=1366x768");
-            edgeOptions.AddArgument("headless");
-            _driver = new EdgeDriver(edgeOptions);
-        }
-        else // Dev Mode
-        {
-            edgeOptions.AddArguments("start.maximized");
-            _driver = new EdgeDriver(edgeOptions);
-            _closeWindowAfterTestExecution = false;
-        }
+            EnableHeadlessMode();
+        else
+            EnableDevsMode();
 
         _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
         _driver.Navigate().GoToUrl(urlPage);
+    }
+
+    private void EnableHeadlessMode()
+    {
+        var edgeOptions = new EdgeOptions();
+        edgeOptions.AddArgument("disk-cache-size=0");
+        edgeOptions.AddArgument("window-size=1366x768");
+        edgeOptions.AddArgument("headless");
+
+        _driver = new EdgeDriver(edgeOptions);
+    }
+
+    private void EnableDevsMode()
+    {
+        var edgeOptions = new EdgeOptions();
+        edgeOptions.AddArgument("disk-cache-size=0");
+        edgeOptions.AddArguments("start.maximized");
+
+        _driver = new EdgeDriver(edgeOptions);
+
+        _closeWindowAfterTestExecution = false;
     }
 
     public void Dispose()
