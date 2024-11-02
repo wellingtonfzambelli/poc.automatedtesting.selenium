@@ -7,7 +7,7 @@ By automating tests, we enhance efficiency and reliability, allowing for quicker
 
 # Stacks of this project
 - .NET 7
-- Selenium
+- Selenium _(Web Driver)_
 - XUnit
 - Visual Studio 2022
 - Correios Web Site _(for testing)_
